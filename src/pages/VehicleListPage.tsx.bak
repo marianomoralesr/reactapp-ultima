@@ -1,0 +1,290 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { useVehicles } from '../context/VehicleContext';
+import { useVehicleFilters } from '../hooks/useVehicleFilters';
+import type { VehicleFilters } from '../types/types';
+import VehicleCard from '../components/VehicleCard';
+import VehicleGridCard from '../components/VehicleGridCard';
+import RecentlyViewed from '../components/RecentlyViewed';
+import Pagination from '../components/Pagination';
+import FilterSidebar from '../components/FilterSidebar';
+import { ListIcon, LayoutGridIcon, SearchIcon, ChevronDownIcon } from '../components/icons';
+import useSEO from '../hooks/useSEO';
+import useDebounce from '../hooks/useDebounce';
+import { formatPrice, formatPromotion, getFilterOptions, filterVehicles, sortVehicles } from '../utils/formatters';
+
+const VehicleListPage: React.FC = () => {
+  const { marca, carroceria } = useParams<{ marca?: string; carroceria?: string }>();
+
+  useSEO({
+    title: marca ? `Encuentra los mejores ${marca} de la Ciudad` : carroceria ? `Encuentra los mejores ${carroceria} de la Ciudad` : 'Inventario de Autos Seminuevos en Venta | TREFA',
+    description: 'Explora el inventario de autos seminuevos garantizados en TREFA. Encuentra tu próximo auto con financiamiento a tu medida. Filtra por marca, modelo y año.',
+    keywords: 'autos seminuevos, venta de autos, financiamiento automotriz, TREFA, comprar auto, inventario de autos'
+  });
+
+  const [view, setView] = useState<'list' | 'grid'>('grid');
+  const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false);
+
+  const {
+    filters,
+    currentPage,
+    handleFiltersChange,
+    handleClearFilters,
+    handleCategoryChange,
+    onRemoveFilter,
+    handlePageChange,
+  } = useVehicleFilters();
+
+  const { setSearchParams } = useVehicleFilters();
+
+  useEffect(() => {
+    const newParams = new URLSearchParams();
+    if (marca) {
+      newParams.set('marca', marca);
+    }
+    if (carroceria) {
+      newParams.set('carroceria', carroceria);
+    }
+    if (newParams.toString()) {
+      setSearchParams(newParams);
+    }
+  }, [marca, carroceria, setSearchParams]);
+
+  const [searchTerm, setSearchTerm] = useState(filters.search || '');
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  useEffect(() => {
+    if (debouncedSearchTerm !== filters.search) {
+      handleFiltersChange({ search: debouncedSearchTerm });
+    }
+  }, [debouncedSearchTerm, filters.search, handleFiltersChange]);
+
+  useEffect(() => {
+    if (filters.search !== searchTerm) {
+      setSearchTerm(filters.search || '');
+    }
+  }, [filters.search]);
+
+  const {
+    vehicles: allVehicles,
+    isLoading,
+    error,
+  } = useVehicles();
+
+  console.log('VehicleListPage Data:', { allVehicles, isLoading, error });
+
+  useEffect(() => {
+    document.body.style.overflow = isFilterSheetOpen ? 'hidden' : 'auto';
+    return () => { document.body.style.overflow = 'auto'; };
+  }, [isFilterSheetOpen]);
+
+  useEffect(() => {
+    const handleToggle = () => setIsFilterSheetOpen(o => !o);
+    window.addEventListener('toggleFilterSheet', handleToggle);
+    return () => window.removeEventListener('toggleFilterSheet', handleToggle);
+  }, []);
+
+  const filterOptions = useMemo(() => getFilterOptions(allVehicles), [allVehicles]);
+
+  const filteredAndSortedVehicles = useMemo(() => {
+    console.log('Filtering Step 1: allVehicles', allVehicles);
+    console.log('Filtering Step 2: filters applied', filters);
+    const filtered = filterVehicles(allVehicles, filters);
+    console.log('Filtering Step 3: after filterVehicles()', filtered);
+    const sorted = sortVehicles(filtered, filters.orderby || 'default');
+    console.log('Filtering Step 4: after sortVehicles()', sorted);
+    return sorted;
+  }, [allVehicles, filters]);
+
+  const vehiclesPerPage = 12;
+  const totalPages = Math.ceil(filteredAndSortedVehicles.length / vehiclesPerPage);
+  const paginatedVehicles = useMemo(() => {
+    const startIndex = (currentPage - 1) * vehiclesPerPage;
+    const paginated = filteredAndSortedVehicles.slice(startIndex, startIndex + vehiclesPerPage);
+    console.log('Pagination Step 5: final paginatedVehicles', paginated);
+    return paginated;
+  }, [filteredAndSortedVehicles, currentPage]);
+
+  const activeFiltersList = useMemo(() => {
+    const list: { key: keyof VehicleFilters, value: string | number | boolean, label: string }[] = [];
+
+    for (const key in filters) {
+      const filterKey = key as keyof VehicleFilters;
+      const value = filters[filterKey];
+
+      if (['per_page', 'page', 'orderby', 'order', 'meta_key', 'search'].includes(filterKey)) continue;
+
+      if (Array.isArray(value) && value.length > 0) {
+        value.forEach(v => {
+          let label = `${v}`;
+          if (filterKey === 'promotion' && typeof v === 'string') {
+            label = formatPromotion(v);
+          }
+          list.push({ key: filterKey, value: v, label });
+        });
+      } else if (filterKey === 'minPrice' && typeof value === 'number') {
+        list.push({ key: filterKey, value, label: `Precio > ${formatPrice(value)}` });
+      } else if (filterKey === 'maxPrice' && typeof value === 'number') {
+        list.push({ key: filterKey, value, label: `Precio < ${formatPrice(value)}` });
+      } else if (filterKey === 'minEnganche' && typeof value === 'number') {
+        list.push({ key: filterKey, value, label: `Enganche > ${formatPrice(value)}` });
+      } else if (filterKey === 'maxEnganche' && typeof value === 'number') {
+        list.push({ key: filterKey, value, label: `Enganche < ${formatPrice(value)}` });
+      } else if (filterKey === 'hideSeparado' && value === true) {
+        list.push({ key: filterKey, value, label: 'Ocultar separados' });
+      }
+    }
+    return list;
+  }, [filters]);
+
+  if (isLoading) {
+    return (
+      <main className="max-w-screen-2xl mx-auto p-4 sm:p-6 lg:p-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[384px_1fr] gap-8 items-start">
+          <div className="hidden lg:block">
+            <div className="bg-white p-6 rounded-2xl shadow-sm animate-pulse">
+              <div className="h-8 bg-gray-200 rounded w-3/4 mb-6"></div>
+              <div className="space-y-4">
+                <div className="h-6 bg-gray-200 rounded w-full"></div>
+                <div className="h-6 bg-gray-200 rounded w-5/6"></div>
+                <div className="h-6 bg-gray-200 rounded w-full"></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="h-12 bg-gray-200 rounded-xl mb-6 animate-pulse"></div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              {renderSkeletons()}
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <>
+      <main className="max-w-screen-2xl mx-auto p-4 sm:p-6 lg:p-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[384px_1fr] gap-8 items-start">
+          <div className="hidden lg:block">
+            <FilterSidebar
+              allVehicles={allVehicles}
+              onFiltersChange={handleFiltersChange}
+              onClearFilters={handleClearFilters}
+              filterOptions={filterOptions}
+              currentFilters={filters}
+              onCategoryChange={handleCategoryChange}
+              onRemoveFilter={onRemoveFilter}
+              activeFiltersList={activeFiltersList}
+            />
+          </div>
+          <div>
+            <div className="relative mb-6">
+              <label htmlFor="search-vehicle" className="sr-only">Buscar vehículo</label>
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+              </div>
+              <input
+                id="search-vehicle"
+                type="search"
+                placeholder="Buscar por marca, modelo o año..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="block w-full rounded-xl border-gray-200 bg-white py-3 pl-12 pr-4 text-gray-900 shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+
+            <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
+              <div>
+                <p className="text-xl font-medium text-gray-800">
+                  <span className="font-extrabold">{filteredAndSortedVehicles.length.toLocaleString('es-MX')}</span> auto{filteredAndSortedVehicles.length !== 1 ? 's' : ''} encontrado{filteredAndSortedVehicles.length !== 1 ? 's' : ''}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <label htmlFor="sort-by" className="sr-only">Ordenar por</label>
+                  <select
+                    id="sort-by"
+                    value={filters.orderby || 'default'}
+                    onChange={(e) => handleFiltersChange({ orderby: e.target.value })}
+                    className="appearance-none bg-white text-gray-700 font-semibold text-sm pl-3 pr-8 py-2.5 rounded-lg border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition"
+                  >
+                    <option value="default">Más Recientes</option>
+                    <option value="relevance">Más Populares</option>
+                    <option value="price-asc">Precio: Menor a Mayor</option>
+                    <option value="price-desc">Precio: Mayor a Menor</option>
+                    <option value="year-desc">Año: Más Recientes</option>
+                    <option value="mileage-asc">Kilometraje: Menor a Mayor</option>
+                  </select>
+                  <ChevronDownIcon className="w-4 h-4 text-gray-500 absolute top-1/2 right-2.5 -translate-y-1/2 pointer-events-none" />
+                </div>
+                <button onClick={() => setView('list')} aria-label="Vista de lista" className={`p-2 rounded-lg ${view === 'list' ? 'bg-primary-600 text-white' : 'bg-white text-gray-500 shadow-sm'}`}>
+                  <ListIcon className="w-6 h-6" />
+                </button>
+                <button onClick={() => setView('grid')} aria-label="Vista de cuadrícula" className={`p-2 rounded-lg ${view === 'grid' ? 'bg-primary-600 text-white' : 'bg-white text-gray-500 shadow-sm'}`}>
+                  <LayoutGridIcon className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            {isLoading ? (
+              view === 'list'
+                ? <div className="space-y-6">{renderSkeletons()}</div>
+                : <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">{renderSkeletons()}</div>
+            ) : error ? (
+              <p className="text-red-500 text-center py-10">Error al cargar los autos. Por favor, inténtelo de nuevo más tarde.</p>
+            ) : paginatedVehicles.length === 0 ? (
+              <div className="text-center py-16 px-6 bg-white rounded-2xl">
+                <img src="http://5.183.8.48/wp-content/uploads/2024/09/trefa-no-encontrado.png" alt="No se encontraron resultados" className="w-48 mx-auto mb-6" />
+                <h3 className="text-xl font-semibold text-gray-800">No se encontraron autos</h3>
+                <p className="text-gray-500 mt-2">Intente ajustar los filtros o ampliar su búsqueda.</p>
+              </div>
+            ) : (
+              <>
+                {view === 'list' ? (
+                  <div className="space-y-6">
+                    {paginatedVehicles.map(vehicle => <VehicleCard key={vehicle.id} vehicle={vehicle} />)}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {paginatedVehicles.map(vehicle => <VehicleGridCard key={vehicle.id} vehicle={vehicle} />)}
+                  </div>
+                )}
+
+                {totalPages > 1 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                )}
+              </>
+            )}
+          </div>
+        </div>
+        <RecentlyViewed layout="carousel" />
+      </main>
+
+      <div className={`fixed inset-0 z-50 lg:hidden transition-opacity duration-300 ${isFilterSheetOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className="absolute inset-0 bg-black/50" onClick={() => setIsFilterSheetOpen(false)}></div>
+        <div className={`absolute bottom-0 left-0 right-0 max-h-[85vh] bg-white/95 backdrop-blur-sm rounded-t-2xl flex flex-col transition-transform duration-300 ease-out ${isFilterSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}>
+          <FilterSidebar
+            allVehicles={allVehicles}
+            isMobileSheet={true}
+            onCloseSheet={() => setIsFilterSheetOpen(false)}
+            resultsCount={filteredAndSortedVehicles.length}
+            onFiltersChange={handleFiltersChange}
+            onClearFilters={handleClearFilters}
+            filterOptions={filterOptions}
+            currentFilters={filters}
+            onCategoryChange={handleCategoryChange}
+            onRemoveFilter={onRemoveFilter}
+            activeFiltersList={activeFiltersList}
+          />
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default VehicleListPage;

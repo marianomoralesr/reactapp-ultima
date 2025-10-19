@@ -1,0 +1,135 @@
+-- Non-destructive migration script to add CRM features and 'sales' role permissions.
+-- This script is designed to be run safely on an existing database.
+
+-- 1. SAFELY ADD 'sales' ROLE
+-- This block adds the 'sales' value to the user_role enum only if it doesn't already exist.
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_enum WHERE enumlabel = 'sales' AND enumtypid = 'public.user_role'::regtype) THEN
+        ALTER TYPE public.user_role ADD VALUE 'sales';
+    END IF;
+END$$;
+
+-- 2. CREATE NEW TABLES (IF THEY DON'T EXIST)
+-- These tables support CRM functionalities like tagging leads and setting reminders.
+
+CREATE TABLE IF NOT EXISTS public.lead_tags (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    tag_name text NOT NULL UNIQUE,
+    color text NOT NULL,
+    created_at timestamptz DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS public.lead_tag_associations (
+    lead_id uuid NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+    tag_id uuid NOT NULL REFERENCES public.lead_tags(id) ON DELETE CASCADE,
+    PRIMARY KEY (lead_id, tag_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.lead_reminders (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    lead_id uuid NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+    agent_id uuid REFERENCES auth.users(id) ON DELETE SET NULL,
+    reminder_text text NOT NULL,
+    reminder_date timestamptz NOT NULL,
+    is_completed boolean DEFAULT false NOT NULL,
+    created_at timestamptz DEFAULT now()
+);
+
+-- 3. UPDATE HELPER FUNCTION
+-- This function is used by RLS policies to check the current user's role.
+-- Using CREATE OR REPLACE ensures it's updated safely.
+-- IMPORTANT: This version runs with the caller's permissions (SECURITY INVOKER), which is safer.
+CREATE OR REPLACE FUNCTION public.get_my_role()
+RETURNS public.user_role
+LANGUAGE sql
+STABLE
+AS $$
+  SELECT role FROM public.profiles WHERE id = auth.uid();
+$$;
+
+-- 4. ENABLE RLS AND ADD ADDITIVE POLICIES
+-- Enable Row Level Security on new and existing tables. This is idempotent and safe to run.
+ALTER TABLE public.lead_tags ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.lead_tag_associations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.lead_reminders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.financing_applications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.uploaded_documents ENABLE ROW LEVEL SECURITY;
+
+-- POLICIES FOR NEW CRM TABLES (idempotent: drop if exists, then create)
+DROP POLICY IF EXISTS "Allow admin and sales to manage lead tags" ON public.lead_tags;
+CREATE POLICY "Allow admin and sales to manage lead tags" ON public.lead_tags
+    FOR ALL USING ((SELECT public.get_my_role()) IN ('admin', 'sales'));
+
+DROP POLICY IF EXISTS "Allow admin and sales to manage lead tag associations" ON public.lead_tag_associations;
+CREATE POLICY "Allow admin and sales to manage lead tag associations" ON public.lead_tag_associations
+    FOR ALL USING ((SELECT public.get_my_role()) IN ('admin', 'sales'));
+    
+DROP POLICY IF EXISTS "Allow admin and sales to manage lead reminders" ON public.lead_reminders;
+CREATE POLICY "Allow admin and sales to manage lead reminders" ON public.lead_reminders
+    FOR ALL USING ((SELECT public.get_my_role()) IN ('admin', 'sales'));
+
+-- ADDITIVE POLICIES FOR EXISTING TABLES (idempotent)
+-- These policies grant 'sales' role additional permissions without affecting existing rules.
+
+DROP POLICY IF EXISTS "Allow sales role to read and update all profiles" ON public.profiles;
+CREATE POLICY "Allow sales role to read and update all profiles" ON public.profiles
+    FOR ALL USING ((SELECT public.get_my_role()) IN ('admin', 'sales'));
+
+DROP POLICY IF EXISTS "Allow sales role to read all financing applications" ON public.financing_applications;
+CREATE POLICY "Allow sales role to read all financing applications" ON public.financing_applications
+    FOR SELECT USING ((SELECT public.get_my_role()) IN ('admin', 'sales'));
+
+DROP POLICY IF EXISTS "Allow sales role to read all uploaded documents" ON public.uploaded_documents;
+CREATE POLICY "Allow sales role to read all uploaded documents" ON public.uploaded_documents
+    FOR SELECT USING ((SELECT public.get_my_role()) IN ('admin', 'sales'));
+
+-- 5. CREATE SECURE RPC FUNCTION FOR LEADS DASHBOARD
+-- This function is callable by admin/sales roles and relies on RLS policies for data access.
+CREATE OR REPLACE FUNCTION public.get_leads_for_dashboard()
+RETURNS TABLE (
+    id uuid,
+    first_name text,
+    last_name text,
+    email text,
+    phone text,
+    source text,
+    contactado boolean,
+    asesor_asignado text,
+    latest_app_status text,
+    latest_app_car_info jsonb
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- Explicitly check role for an extra layer of security on the function call itself.
+    IF (SELECT public.get_my_role()) NOT IN ('admin', 'sales') THEN
+        RAISE EXCEPTION 'Permission denied to access leads dashboard.';
+    END IF;
+
+    -- The function runs with the caller's permissions, so RLS policies on underlying tables are automatically applied.
+    RETURN QUERY
+    SELECT
+        p.id,
+        p.first_name,
+        p.last_name,
+        p.email,
+        p.phone,
+        p.source,
+        p.contactado,
+        (SELECT u.email FROM auth.users u WHERE u.id = p.asesor_asignado) as asesor_asignado,
+        latest_app.status as latest_app_status,
+        latest_app.car_info as latest_app_car_info
+    FROM
+        public.profiles p
+    LEFT JOIN LATERAL (
+        SELECT fa.status, fa.car_info
+        FROM public.financing_applications fa
+        WHERE fa.user_id = p.id
+        ORDER BY fa.created_at DESC
+        LIMIT 1
+    ) latest_app ON true
+    ORDER BY p.updated_at DESC;
+END;
+$$;

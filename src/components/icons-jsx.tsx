@@ -1,0 +1,382 @@
+import React from 'react';
+import {
+    Filter,
+    Menu,
+    LayoutGrid,
+    List,
+    Home,
+    PlayCircle,
+    Share2,
+    Copy,
+    Heart,
+    Check,
+    X,
+    UserCircle2,
+    ArrowLeft,
+    Users,
+    ChevronDown,
+    ChevronLeft,
+    ChevronRight,
+    Tag,
+    Mail,
+    ArrowDown,
+    ArrowUp,
+    Eye,
+    Minus,
+    Bell,
+    Plus,
+    XCircle,
+    CheckCircle,
+    Car,
+    CarFront,
+    Truck,
+    FileText,
+    DollarSign,
+    User,
+    Calculator,
+    Printer,
+    Share,
+    ShieldCheck,
+    Award,
+    Star,
+    Edit,
+    Settings,
+    ArrowRight,
+    Sun,
+    Moon,
+    Sparkles,
+    Zap,
+    TrendingUp,
+    CreditCard,
+    LogOut,
+    Target,
+    Link,
+    KeyRound,
+    Puzzle,
+    Bot,
+    BarChart2,
+    Save,
+    Loader2,
+    AlertTriangle,
+    PlusCircle,
+    Info,
+    Trash2,
+    Image,
+    Send,
+    ServerCrash,
+    Code,
+    BookOpen,
+    RefreshCw,
+    Camera,
+    Download,
+    ChevronUp,
+    Gauge,
+    Smartphone,
+    Wind,
+    Building2,
+    Calendar,
+    MessageSquare,
+    Wrench,
+    Microscope,
+    PenSquare,
+    LayoutDashboard,
+    Briefcase,
+    Clock,
+    MessageCircle as LucideMessageCircle,
+    Phone,
+    HelpCircle,
+    Cable,
+    Bluetooth,
+    BriefcaseBusiness,
+    Paperclip,
+    LockKeyhole,
+    // RotateCcwKey,
+    SmartphoneCharging,
+    Plug,
+    Megaphone,
+    MessageCircleQuestion,
+    BadgePercent,
+    BadgeInfo,
+    BadgeDollarSign,
+    BellPlus,
+    // MapPinHouse,
+    Cog,
+    Handshake,
+    FolderClock,
+    FolderDown,
+    FolderLock,
+    FolderX,
+    KeySquare,
+    MessageSquareHeart,
+    Fuel,
+    // ClockArrowDown,
+    Droplet,
+    CalendarClock,
+    GraduationCap,
+    ArrowUpFromLine,
+    ArrowDownFromLine,
+    Beaker,
+    Flame,
+    // HeartPlus,
+    // ShieldUser,
+    CaptionsOff,
+    EyeOff,
+    Percent,
+    // UserRoundPen,
+    CircleUserRound,
+    // ChartSpline,
+    RefreshCwOff,
+    // HeartMinus,
+    Database,
+    Search
+
+} from 'lucide-react';
+
+
+export const DatabaseIcon: React.FC<IconProps> = (props) => <Database {...props} />;
+export const SearchIcon: React.FC<IconProps> = (props) => <Search {...props} />;
+export const XIcon: React.FC<IconProps> = (props) => <X {...props} />;
+
+type IconProps = React.SVGProps<SVGSVGElement>;
+
+// ==================== GENERAL UI ICONS ====================
+export const FilterIcon: React.FC<IconProps> = (props) => <Filter {...props} />;
+export const Bars3Icon: React.FC<IconProps> = (props) => <Menu {...props} />;
+export const ListIcon: React.FC<IconProps> = (props) => <List {...props} />;
+export const LayoutGridIcon: React.FC<IconProps> = (props) => <LayoutGrid {...props} />;
+export const HomeIcon: React.FC<IconProps> = (props) => <Home {...props} />;
+export const EyeIcon: React.FC<IconProps> = (props) => <Eye {...props} />;
+export const EyeOffIcon: React.FC<IconProps> = (props) => <EyeOff {...props} />;
+export const MinusIcon: React.FC<IconProps> = (props) => <Minus {...props} />;
+export const PlusIcon: React.FC<IconProps> = (props) => <Plus {...props} />;
+export const CheckIcon: React.FC<IconProps> = (props) => <Check {...props} />;
+export const XMarkIcon: React.FC<IconProps> = (props) => <X {...props} />;
+export const XCircleIcon: React.FC<IconProps> = (props) => <XCircle {...props} />;
+export const CheckCircleIcon: React.FC<IconProps> = (props) => <CheckCircle {...props} />;
+export const PlusCircleIcon: React.FC<IconProps> = (props) => <PlusCircle {...props} />;
+export const InfoIcon: React.FC<IconProps> = (props) => <Info {...props} />;
+export const BadgeInfoIcon: React.FC<IconProps> = (props) => <BadgeInfo {...props} />;
+export const HelpCircleIcon: React.FC<IconProps> = (props) => <HelpCircle {...props} />;
+
+// ==================== NAVIGATION & ARROWS ====================
+export const ArrowLeftIcon: React.FC<IconProps> = (props) => <ArrowLeft {...props} />;
+export const ArrowRightIcon: React.FC<IconProps> = (props) => <ArrowRight {...props} />;
+export const ArrowUpIcon: React.FC<IconProps> = (props) => <ArrowUp {...props} />;
+export const ArrowDownIcon: React.FC<IconProps> = (props) => <ArrowDown {...props} />;
+export const ChevronLeftIcon: React.FC<IconProps> = (props) => <ChevronLeft {...props} />;
+export const ChevronRightIcon: React.FC<IconProps> = (props) => <ChevronRight {...props} />;
+export const ChevronDownIcon: React.FC<IconProps> = (props) => <ChevronDown {...props} />;
+export const ChevronUpIcon: React.FC<IconProps> = (props) => <ChevronUp {...props} />;
+
+// ==================== COMMUNICATION & ALERTS ====================
+export const BellIcon: React.FC<IconProps> = (props) => <Bell {...props} />;
+export const BellPlusIcon: React.FC<IconProps> = (props) => <BellPlus {...props} />;
+export const MegaphoneIcon: React.FC<IconProps> = (props) => <Megaphone {...props} />;
+export const SendIcon: React.FC<IconProps> = (props) => <Send {...props} />;
+export const EnvelopeIcon: React.FC<IconProps> = (props) => <Mail {...props} />;
+export const MessageCircle: React.FC<IconProps> = (props) => <LucideMessageCircle {...props} />;
+export const MessageSquareIcon: React.FC<IconProps> = (props) => <MessageSquare {...props} />;
+export const MessageCircleQuestionIcon: React.FC<IconProps> = (props) => <MessageCircleQuestion {...props} />;
+export const MessageSquareHeartIcon: React.FC<IconProps> = (props) => <MessageSquareHeart {...props} />;
+export const PhoneIcon: React.FC<IconProps> = (props) => <Phone {...props} />;
+
+// ==================== CONNECTIVITY & TECHNOLOGY ====================
+export const CableIcon: React.FC<IconProps> = (props) => <Cable {...props} />;
+export const BluetoothIcon: React.FC<IconProps> = (props) => <Bluetooth {...props} />;
+export const PlugIcon: React.FC<IconProps> = (props) => <Plug {...props} />;
+export const SmartphoneIcon: React.FC<IconProps> = (props) => <Smartphone {...props} />;
+export const SmartphoneChargingIcon: React.FC<IconProps> = (props) => <SmartphoneCharging {...props} />;
+
+// ==================== BUSINESS & FINANCE ====================
+export const BriefcaseIcon: React.FC<IconProps> = (props) => <Briefcase {...props} />;
+export const BriefcaseBusinessIcon: React.FC<IconProps> = (props) => <BriefcaseBusiness {...props} />;
+export const HandshakeIcon: React.FC<IconProps> = (props) => <Handshake {...props} />;
+export const BadgePercentIcon: React.FC<IconProps> = (props) => <BadgePercent {...props} />;
+export const BadgeDollarSignIcon: React.FC<IconProps> = (props) => <BadgeDollarSign {...props} />;
+export const DollarSignIcon: React.FC<IconProps> = (props) => <DollarSign {...props} />;
+export const BanknoteArrowUpIcon: React.FC<IconProps> = (props) => <ArrowUpFromLine {...props} />;
+export const BanknoteArrowDownIcon: React.FC<IconProps> = (props) => <ArrowDownFromLine {...props} />;
+export const CalculatorIcon: React.FC<IconProps> = (props) => <Calculator {...props} />;
+// export const ChartSplineIcon: React.FC<IconProps> = (props) => <ChartSpline {...props} />;
+export const ChartSplineIcon: React.FC<IconProps> = (props) => <BarChart2 {...props} />; // Fallback
+export const BarChart2Icon: React.FC<IconProps> = (props) => <BarChart2 {...props} />;
+export const TrendingUpIcon: React.FC<IconProps> = (props) => <TrendingUp {...props} />;
+export const PercentIcon: React.FC<IconProps> = (props) => <Percent {...props} />;
+export const CreditCardIcon: React.FC<IconProps> = (props) => <CreditCard {...props} />;
+
+// ==================== SECURITY & PRIVACY ====================
+export const PaperclipIcon: React.FC<IconProps> = (props) => <Paperclip {...props} />;
+export const LockKeyholeIcon: React.FC<IconProps> = (props) => <LockKeyhole {...props} />;
+export const RotateCcwKeyIcon: React.FC<IconProps> = (props) => <RefreshCw {...props} />; // Fallback
+export const ShieldCheckIcon: React.FC<IconProps> = (props) => <ShieldCheck {...props} />;
+export const ShieldUserIcon: React.FC<IconProps> = (props) => <ShieldCheck {...props} />; // Fallback
+export const KeyIcon: React.FC<IconProps> = (props) => <KeyRound {...props} />;
+export const KeySquareIcon: React.FC<IconProps> = (props) => <KeySquare {...props} />;
+
+// ==================== FILES & FOLDERS ====================
+export const FileTextIcon: React.FC<IconProps> = (props) => <FileText {...props} />;
+export const FolderClockIcon: React.FC<IconProps> = (props) => <FolderClock {...props} />;
+export const FolderDownIcon: React.FC<IconProps> = (props) => <FolderDown {...props} />;
+export const FolderLockIcon: React.FC<IconProps> = (props) => <FolderLock {...props} />;
+export const FolderXIcon: React.FC<IconProps> = (props) => <FolderX {...props} />;
+export const DocumentDuplicateIcon: React.FC<IconProps> = (props) => <Copy {...props} />;
+export const ImageIcon: React.FC<IconProps> = (props) => <Image {...props} />;
+
+// ==================== TIME & CALENDAR ====================
+export const ClockIcon: React.FC<IconProps> = (props) => <Clock {...props} />;
+export const ClockArrowDownIcon: React.FC<IconProps> = (props) => <Clock {...props} />; // Fallback
+export const CalendarIcon: React.FC<IconProps> = (props) => <Calendar {...props} />;
+export const CalendarClockIcon: React.FC<IconProps> = (props) => <CalendarClock {...props} />;
+
+// ==================== LOCATION & SETTINGS ====================
+export const MapPinHouseIcon: React.FC<IconProps> = (props) => <Building2 {...props} />; // Fallback
+export const BuildingIcon: React.FC<IconProps> = (props) => <Building2 {...props} />;
+export const SettingsIcon: React.FC<IconProps> = (props) => <Settings {...props} />;
+export const CogIcon: React.FC<IconProps> = (props) => <Cog {...props} />;
+export const WrenchIcon: React.FC<IconProps> = (props) => <Wrench {...props} />;
+
+// ==================== TAGS & LABELS ====================
+export const TagIcon: React.FC<IconProps> = (props) => <Tag {...props} />;
+
+// ==================== AUTOMOTIVE & VEHICLE ====================
+export const CarIcon: React.FC<IconProps> = (props) => <Car {...props} />;
+export const FuelIcon: React.FC<IconProps> = (props) => <Fuel {...props} />;
+export const GaugeIcon: React.FC<IconProps> = (props) => <Gauge {...props} />;
+export const FlameIcon: React.FC<IconProps> = (props) => <Flame {...props} />;
+export const DropletIcon: React.FC<IconProps> = (props) => <Droplet {...props} />;
+export const WindIcon: React.FC<IconProps> = (props) => <Wind {...props} />;
+
+// ==================== EDUCATION & SCIENCE ====================
+export const GraduationCapIcon: React.FC<IconProps> = (props) => <GraduationCap {...props} />;
+export const BeakerIcon: React.FC<IconProps> = (props) => <Beaker {...props} />;
+export const MicroscopeIcon: React.FC<IconProps> = (props) => <Microscope {...props} />;
+export const BookOpenIcon: React.FC<IconProps> = (props) => <BookOpen {...props} />;
+
+// ==================== USER & PROFILE ====================
+export const UserIcon: React.FC<IconProps> = (props) => <User {...props} />;
+export const UserCircleIcon: React.FC<IconProps> = (props) => <UserCircle2 {...props} />;
+export const UsersIcon: React.FC<IconProps> = (props) => <Users {...props} />;
+export const UserRoundPenIcon: React.FC<IconProps> = (props) => <User {...props} />; // Fallback
+export const CircleUserRoundIcon: React.FC<IconProps> = (props) => <CircleUserRound {...props} />;
+export const LogOutIcon: React.FC<IconProps> = (props) => <LogOut {...props} />;
+
+// ==================== MEDIA & CONTENT ====================
+export const CameraIcon: React.FC<IconProps> = (props) => <Camera {...props} />;
+export const CaptionsOffIcon: React.FC<IconProps> = (props) => <CaptionsOff {...props} />;
+export const PlayCircleIcon: React.FC<IconProps> = (props) => <PlayCircle {...props} />;
+
+// ==================== ACTIONS & INTERACTIONS ====================
+export const HeartIcon: React.FC<IconProps> = (props) => <Heart {...props} />;
+export const SolidHeartIcon: React.FC<IconProps> = (props) => <Heart {...props} fill="currentColor" />;
+export const HeartPlusIcon: React.FC<IconProps> = (props) => <Heart {...props} />; // Fallback
+export const HeartMinusIcon: React.FC<IconProps> = (props) => <Heart {...props} />; // Fallback
+export const ShareIcon: React.FC<IconProps> = (props) => <Share2 {...props} />;
+export const ShareAltIcon: React.FC<IconProps> = (props) => <Share {...props} />;
+export const EditIcon: React.FC<IconProps> = (props) => <Edit {...props} />;
+export const PenSquareIcon: React.FC<IconProps> = (props) => <PenSquare {...props} />;
+export const Trash2Icon: React.FC<IconProps> = (props) => <Trash2 {...props} />;
+export const RefreshCwIcon: React.FC<IconProps> = (props) => <RefreshCw {...props} />;
+export const RefreshCwOffIcon: React.FC<IconProps> = (props) => <RefreshCwOff {...props} />;
+export const DownloadIcon: React.FC<IconProps> = (props) => <Download {...props} />;
+export const SaveIcon: React.FC<IconProps> = (props) => <Save {...props} />;
+export const PrintIcon: React.FC<IconProps> = (props) => <Printer {...props} />;
+
+// ==================== STATUS & FEEDBACK ====================
+export const Loader2Icon: React.FC<IconProps> = (props) => <Loader2 {...props} />;
+export const AlertTriangleIcon: React.FC<IconProps> = (props) => <AlertTriangle {...props} />;
+export const AwardIcon: React.FC<IconProps> = (props) => <Award {...props} />;
+export const StarIcon: React.FC<IconProps> = (props) => <Star {...props} />;
+
+// ==================== DASHBOARD & LAYOUT ====================
+export const LayoutDashboardIcon: React.FC<IconProps> = (props) => <LayoutDashboard {...props} />;
+
+// ==================== MARKETING & TARGETING ====================
+export const TargetIcon: React.FC<IconProps> = (props) => <Target {...props} />;
+export const LinkIcon: React.FC<IconProps> = (props) => <Link {...props} />;
+export const PuzzleIcon: React.FC<IconProps> = (props) => <Puzzle {...props} />;
+export const BotIcon: React.FC<IconProps> = (props) => <Bot {...props} />;
+
+// ==================== DEVELOPER & TECHNICAL ====================
+export const ServerCrashIcon: React.FC<IconProps> = (props) => <ServerCrash {...props} />;
+export const CodeIcon: React.FC<IconProps> = (props) => <Code {...props} />;
+
+// ==================== THEME & APPEARANCE ====================
+export const SunIcon: React.FC<IconProps> = (props) => <Sun {...props} />;
+export const MoonIcon: React.FC<IconProps> = (props) => <Moon {...props} />;
+export const SparklesIcon: React.FC<IconProps> = (props) => <Sparkles {...props} />;
+export const ZapIcon: React.FC<IconProps> = (props) => <Zap {...props} />;
+
+// ==================== COMPOSITE ICONS ====================
+export const BuyCarIcon: React.FC<IconProps> = (props) => (
+    <span className="relative inline-flex items-center justify-center w-6 h-6">
+        <Car {...props} />
+        <ArrowDown 
+            className="absolute -top-1 -right-1 w-4 h-4 bg-primary-100 text-primary-600 rounded-full p-0.5 border-2 border-white"
+        />
+    </span>
+);
+
+export const SellCarIcon: React.FC<IconProps> = (props) => (
+    <span className="relative inline-flex items-center justify-center w-6 h-6">
+        <DollarSign {...props} />
+        <ArrowUp
+            className="absolute -top-1 -right-1 w-4 h-4 bg-primary-100 text-primary-600 rounded-full p-0.5 border-2 border-white"
+        />
+    </span>
+);
+
+// ==================== VEHICLE TYPE ICONS ====================
+export const SuvIcon: React.FC<IconProps> = (props) => <CarFront {...props} />;
+export const SedanIcon: React.FC<IconProps> = (props) => <Car {...props} />;
+export const PickupIcon: React.FC<IconProps> = (props) => <Truck {...props} />;
+export const TruckIcon: React.FC<IconProps> = (props) => <Truck {...props} />;
+export const HatchbackIcon: React.FC<IconProps> = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <path d="M20 17h2c.6 0 1-.4 1-1v-4c0-1.1-.9-2-2-2h-1.8" />
+        <path d="M3 17h11" />
+        <path d="M12.4 11.6L9 7" />
+        <path d="M8 7H4.5a2 2 0 0 0-1.9 2.8l1.4 3.2" />
+        <circle cx="5.5" cy="17.5" r="2.5" />
+        <circle cx="16.5" cy="17.5" r="2.5" />
+    </svg>
+);
+
+// ==================== SOCIAL MEDIA ICONS ====================
+export const WhatsAppIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01s-.521.074-.792.372c-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+    </svg>
+);
+
+export const FacebookIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+        <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v7.008C18.343 21.128 22 16.991 22 12z"/>
+    </svg>
+);
+
+export const InstagramIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163m0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98C15.667 0 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/>
+    </svg>
+);
+
+export const GoogleIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className={className}>
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+    </svg>
+);
+
+export const LinkedInIcon: React.FC<IconProps> = ({ className, ...props }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none" className={className} {...props}>
+        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.762 2.239 5 5 5h14c2.762 0 5-2.238 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.269c-.966 0-1.75-.785-1.75-1.75s.784-1.75 1.75-1.75 1.75.785 1.75 1.75-.784 1.75-1.75 1.75zm13.5 10.269h-3v-4.5c0-1.072-.928-2-2-2s-2 .928-2 2v4.5h-3v-9h3v1.268c.744-1.048 2.056-1.768 3.5-1.768 2.485 0 4.5 2.015 4.5 4.5v5z" />
+    </svg>
+);
+
+export const TwitterIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+    </svg>
+);
