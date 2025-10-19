@@ -40,7 +40,6 @@ const DashboardLayout: React.FC = () => {
                     setIsBetaSurveyVisible={setIsBetaSurveyVisible}
                 />
             </aside>
-
             {/* Mobile Sidebar */}
             <div className={`fixed inset-0 z-40 flex lg:hidden ${sidebarOpen ? '' : 'pointer-events-none'}`}>
                 {/* Overlay */}
@@ -71,25 +70,7 @@ const DashboardLayout: React.FC = () => {
                     />
                 </div>
             </div>
-
-            <div className="flex flex-col w-0 flex-1 overflow-hidden">
-                 {/* Mobile Header */}
-                <div className="relative z-10 flex-shrink-0 flex h-16 bg-white shadow-sm lg:hidden">
-                    <div className="flex-1 px-4 flex justify-between items-center">
-                        <Link to="/">
-                            <img src="/images/trefalogo.png" alt="TREFA Logo" className="h-8 w-auto" />
-                        </Link>
-                        <button
-                            type="button"
-                            className="text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
-                            onClick={() => setSidebarOpen(true)}
-                        >
-                            <span className="sr-only">Abrir menú</span>
-                            <Menu className="h-6 w-6" aria-hidden="true" />
-                        </button>
-                    </div>
-                </div>
-
+            <div className="flex-1 flex flex-col overflow-hidden">
                 <main ref={mainContentRef} className="flex-1 relative overflow-y-auto focus:outline-none">
                     <div className={`py-8 px-4 sm:px-6 lg:px-8 ${noPadding ? '' : 'pb-24 lg:pb-8'}`}>
                         <Outlet />

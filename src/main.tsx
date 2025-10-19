@@ -6,7 +6,6 @@ import '../index.css';
 import { AuthProvider } from './context/AuthContext';
 import { VehicleProvider } from './context/VehicleContext';
 import { FilterProvider } from './context/FilterContext';
-import ErrorBoundary from './components/ErrorBoundary';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
@@ -25,7 +24,6 @@ const queryClient = new QueryClient({
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
   <React.StrictMode>
-    <ErrorBoundary>
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
@@ -36,7 +34,6 @@ root.render(
             </FilterProvider>
           </AuthProvider>
         </QueryClientProvider>
-      </BrowserRouter>
-    </ErrorBoundary>
+      </BrowserRouter>>
   </React.StrictMode>
 );
