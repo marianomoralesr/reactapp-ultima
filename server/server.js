@@ -18,8 +18,8 @@ app.set('trust proxy', 1);
 // --- Security Headers ---
 app.use(
   helmet({
-    crossOriginEmbedderPolicy: false,
-    crossOriginResourcePolicy: false,
+    crossOriginEmbedderPolicy: true,
+    crossOriginResourcePolicy: true,
     hsts: false,
   })
 );
@@ -41,7 +41,7 @@ app.get('/healthz', (_, res) => res.send('ok'));
 app.get('/api/health', (_, res) => res.json({ status: 'ok' }));
 
 // --- Serve React Build ---
-const buildPath = path.resolve(__dirname, '/dist');
+const buildPath = path.resolve(__dirname, '../dist');
 app.use(express.static(buildPath, { maxAge: '1y', etag: true }));
 
 // SPA fallback for React Router
