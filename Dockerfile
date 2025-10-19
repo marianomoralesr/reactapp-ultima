@@ -21,20 +21,18 @@ RUN echo "VITE_SUPABASE_URL=${VITE_SUPABASE_URL}" > .env && \
 FROM node:22-alpine
 WORKDIR /workspace
 
-# Copy server and install only production dependencies
+# Install production dependencies
 COPY server/package*.json ./server/
 RUN cd server && npm ci --omit=dev
 
-# Copy server files
+# Copy server and build output
 COPY server/server.js server/
 COPY server/cronSync.js server/
-
-# Copy build output (frontend)
 COPY --from=builder /app/dist ./dist
 
 ENV NODE_ENV=production
 ENV PORT=8080
 EXPOSE 8080
 
-# Run server
+# Start the server
 CMD ["node", "server/server.js"]
