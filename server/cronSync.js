@@ -119,4 +119,4 @@ cron.schedule('*/10 * * * *', syncAirtableToSupabase);
 
 // Run once on startup
 console.log('[SYNC] Performing initial sync on startup...');
-syncAirtableToSupabase();
+// syncAirtableToSupabase();
